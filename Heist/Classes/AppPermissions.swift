@@ -11,42 +11,56 @@ import CoreLocation
 import Contacts
 
 class AppPermissions {
+    private var locationManager: CLLocationManager
+    private var contactsStore: CNContactStore
     
-    // location
-    class func askLocationPermission() -> Void {
-        let locationManager = CLLocationManager()
-        locationManager.requestWhenInUseAuthorization()
+    init() {
+        locationManager = CLLocationManager()
+        contactsStore = CNContactStore()
     }
     
-    class func canAccessUserLocation() -> Bool {
+    // location
+    func askLocationPermission() -> Void {
+        if !canAccessUserLocation() {
+            locationManager.requestWhenInUseAuthorization()
+            locationManager.requestAlwaysAuthorization()
+        }
+    }
+    
+    func canAccessUserLocation() -> Bool {
         let locStatus = CLLocationManager.authorizationStatus()
         switch locStatus {
            case .notDetermined:
-            self.askLocationPermission()
             return false
            case .denied, .restricted:
             return false
            case .authorizedAlways, .authorizedWhenInUse:
             return true
-           default:
+           @unknown default:
                 print("Unknown user location access status")
         }
             
         return false
     }
     
+    func getLocationManager() -> CLLocationManager {
+        return locationManager
+    }
+    
+    
     // contacts
-    class func askContactsPermissions() -> Void {
-        let store = CNContactStore()
-        store.requestAccess(for: .contacts) { (granted, error) in
-            if let error = error {
-                print("failed to request access", error)
-                return
+    func askContactsPermissions() -> Void {
+        if !canAccessUserContacts() {
+            contactsStore.requestAccess(for: .contacts) { (granted, error) in
+                if let error = error {
+                    print("failed to request access", error)
+                    return
+                }
             }
         }
     }
     
-    class func canAccessUserContacts() -> Bool {
+    func canAccessUserContacts() -> Bool {
       return false
     }
 }

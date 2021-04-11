@@ -60,9 +60,17 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Application needs your location</string>
 	<key>NSContactsUsageDescription</key>
 	<string>Application needs your contacts</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>Application needs your calander</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Application needs you camera</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Application needs your location</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Application needs your location</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Application needs your location</string>
 </dict>
 </plist>
