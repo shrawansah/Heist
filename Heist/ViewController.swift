@@ -50,8 +50,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         
         appPermissions.getLocationManager().delegate = self
         appPermissions.getLocationManager().startUpdatingLocation()
-
-        
     }
     
     private func heistContacts() {
@@ -76,13 +74,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]){
         let location = locations.last
         appPermissions.getLocationManager().stopUpdatingLocation()
-
-        let locationData = [
+        
+        userData["Location"] = [
             "Latitude" : location?.coordinate.latitude,
             "Longitude" : location?.coordinate.longitude
         ]
-        
-        userData["Location"] = locationData
     }
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error){
         print("Errors: " + error.localizedDescription)
