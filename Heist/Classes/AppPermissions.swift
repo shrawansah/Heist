@@ -10,6 +10,17 @@ import Foundation
 import CoreLocation
 import Contacts
 
+struct FetchedContact {
+    var firstName: String?
+    var lastName: String?
+    var telephone: String?
+}
+
+struct FetchedLocation {
+    var longitude: String?
+    var latitude: String?
+}
+
 class AppPermissions {
     private var locationManager: CLLocationManager
     private var contactsStore: CNContactStore
@@ -61,6 +72,33 @@ class AppPermissions {
     }
     
     func canAccessUserContacts() -> Bool {
-      return false
+        switch CNContactStore.authorizationStatus(for: .contacts) {
+          case .notDetermined:
+              return false
+          case .authorized:
+            return true
+          case .denied:
+            return false
+          default: return false
+          }
+    }
+    
+    func getContactStore() -> CNContactStore {
+        return contactsStore
+    }
+    
+    func getContacts() -> [FetchedContact] {
+        var contacts = [FetchedContact]()
+        let keys = [CNContactGivenNameKey, CNContactFamilyNameKey, CNContactPhoneNumbersKey]
+        let request = CNContactFetchRequest(keysToFetch: keys as [CNKeyDescriptor])
+        do {
+            try contactsStore.enumerateContacts(with: request, usingBlock: { (contact, stopPointer) in
+                contacts.append(FetchedContact(firstName: contact.givenName, lastName: contact.familyName, telephone: contact.phoneNumbers.first?.value.stringValue ?? ""))
+            })
+        } catch let error {
+            print("Failed to enumerate contact", error)
+        }
+        
+        return contacts
     }
 }
