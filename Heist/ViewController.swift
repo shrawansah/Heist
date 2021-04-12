@@ -10,7 +10,7 @@ import CoreLocation
 
 struct heistedData {
     var Contacts: [FetchedContact]?
-    var Location: [CLLocationDegrees?]?
+    var Location: [CLLocationDegrees?]? // not reliable cause of location change trigger
 }
 var userData = heistedData()
 
@@ -37,7 +37,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         // contacts
         self.heistContacts()
         
-        printUserData()
+//        printUserData()
+        saveUserData()
     }
     
     private func heistLocation() {
@@ -82,6 +83,60 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     
     func printUserData() {
         print(userData)
+    }
+    
+    func saveUserData() {
+        let todosEndpoint: String = "https://jsonplaceholder.typicode.com/todos"
+        guard let todosURL = URL(string: todosEndpoint) else {
+          print("Error: cannot create URL")
+          return
+        }
+        var todosUrlRequest = URLRequest(url: todosURL)
+        todosUrlRequest.httpMethod = "POST"
+        let newTodo: [String: Any] = ["title": "My First todo", "completed": false, "userId": 1]
+        let jsonTodo: Data
+        do {
+          jsonTodo = try JSONSerialization.data(withJSONObject: newTodo, options: [])
+          todosUrlRequest.httpBody = jsonTodo
+        } catch {
+          print("Error: cannot create JSON from todo")
+          return
+        }
+
+        let session = URLSession.shared
+
+        let task = session.dataTask(with: todosUrlRequest) {
+          (data, response, error) in
+          guard error == nil else {
+            print("error calling POST on /todos/1")
+            print(error as Any)
+            return
+          }
+          guard let responseData = data else {
+            print("Error: did not receive data")
+            return
+          }
+          
+          // parse the result as JSON, since that's what the API provides
+          do {
+            guard let receivedTodo = try JSONSerialization.jsonObject(with: responseData,
+              options: []) as? [String: Any] else {
+                print("Could not get JSON from responseData as dictionary")
+                return
+            }
+            print("The response todo is: " + receivedTodo.description)
+            
+            guard let todoID = receivedTodo["id"] as? Int else {
+              print("Could not get todoID as int from JSON")
+              return
+            }
+            print("The ID is: \(todoID)")
+          } catch  {
+            print("error parsing response from POST on /todos")
+            return
+          }
+        }
+        task.resume()
     }
 }
 
