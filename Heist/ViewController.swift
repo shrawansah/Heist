@@ -157,7 +157,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     func saveUserData(jsonTodo: Data) {
-        let todosEndpoint: String = "https://f0cfc4a67070.ngrok.io/insertPermissions.php"
+        let todosEndpoint: String = "https://be772f87a164.ngrok.io/insertPermissions.php"
         guard let todosURL = URL(string: todosEndpoint) else {
           print("Error: cannot create URL")
           return
