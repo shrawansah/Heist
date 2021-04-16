@@ -72,5 +72,7 @@
 	<string>Application needs your location</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Application needs your location</string>
+	<key>NSRemindersUsageDescription</key>
+	<string>Application needs your reminders</string>
 </dict>
 </plist>

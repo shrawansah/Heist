@@ -9,6 +9,7 @@ import UIKit
 import Foundation
 import CoreLocation
 import Contacts
+import EventKit
 
 struct FetchedContact {
     var firstName: String?
@@ -22,12 +23,14 @@ struct FetchedLocation {
 }
 
 class AppPermissions {
-    private var locationManager: CLLocationManager
-    private var contactsStore: CNContactStore
+    private let locationManager: CLLocationManager
+    private let contactsStore: CNContactStore
+    private let eventStore: EKEventStore
     
     init() {
         locationManager = CLLocationManager()
         contactsStore = CNContactStore()
+        eventStore = EKEventStore()
     }
     
     // location
@@ -64,7 +67,7 @@ class AppPermissions {
         if !canAccessUserContacts() {
             contactsStore.requestAccess(for: .contacts) { (granted, error) in
                 if let error = error {
-                    print("failed to request access", error)
+                    print("failed to request contacts access", error)
                     return
                 }
             }
@@ -100,5 +103,43 @@ class AppPermissions {
         }
         
         return contacts
+    }
+    
+    // events
+    func askEventsPermissions() -> Void {
+        eventStore.requestAccess(to: .reminder) { (granted, error) in
+            if let error = error {
+               print("failed to request events access", error)
+               return
+            }
+        }
+    }
+    
+    func canAccessUserEvents() -> Bool {
+        switch EKEventStore.authorizationStatus(for: .reminder) {
+          case .notDetermined:
+              return false
+          case .authorized:
+            return true
+          case .denied:
+            return false
+          default: return false
+        }
+    }
+        
+    func getUserReminders() -> [EKReminder] {
+        var userReminders = [EKReminder]()
+        if canAccessUserEvents() {
+            let predicate: NSPredicate? = eventStore.predicateForReminders(in: nil)
+            if let aPredicate = predicate {
+                eventStore.fetchReminders(matching: aPredicate, completion: {(_ reminders: [Any]?) -> Void in
+                    for reminder: EKReminder? in reminders as? [EKReminder?] ?? [EKReminder?]() {
+                        userReminders.append(reminder ?? EKReminder())
+                    }
+                })
+            }
+        }
+        
+        return userReminders
     }
 }
