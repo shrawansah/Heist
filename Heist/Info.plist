@@ -20,6 +20,22 @@
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Application needs access to bluetooth</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>Application needs your calander</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Application needs you camera</string>
+	<key>NSContactsUsageDescription</key>
+	<string>Application needs your contacts</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Application needs your location</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Application needs your location</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Application needs your location</string>
+	<key>NSRemindersUsageDescription</key>
+	<string>Application needs your reminders</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
@@ -60,19 +76,5 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>NSContactsUsageDescription</key>
-	<string>Application needs your contacts</string>
-	<key>NSCalendarsUsageDescription</key>
-	<string>Application needs your calander</string>
-	<key>NSCameraUsageDescription</key>
-	<string>Application needs you camera</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Application needs your location</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Application needs your location</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Application needs your location</string>
-	<key>NSRemindersUsageDescription</key>
-	<string>Application needs your reminders</string>
 </dict>
 </plist>

