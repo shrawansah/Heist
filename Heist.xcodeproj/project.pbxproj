@@ -3,11 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		818DB7A705BF0426F1DF9F8B /* Pods_Heist.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 889F0DBBB9DDB83399EB089E /* Pods_Heist.framework */; };
+		73D6996FA16E145ACB94CEE7 /* Pods_Heist.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BF18C3C77B66966B400816D /* Pods_Heist.framework */; };
 		9C76B4E326236DDA00A85CC3 /* AppPermissions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C76B4E226236DDA00A85CC3 /* AppPermissions.swift */; };
 		9C9E9C19261F78E90012FBC4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9E9C18261F78E90012FBC4 /* AppDelegate.swift */; };
 		9C9E9C1B261F78E90012FBC4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9E9C1A261F78E90012FBC4 /* SceneDelegate.swift */; };
@@ -21,8 +21,8 @@
 
 /* Begin PBXFileReference section */
 		6771AF835B6E0DFB64750A3D /* Pods-Heist.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Heist.debug.xcconfig"; path = "Target Support Files/Pods-Heist/Pods-Heist.debug.xcconfig"; sourceTree = "<group>"; };
-		889F0DBBB9DDB83399EB089E /* Pods_Heist.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Heist.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		88EAAEB73F59CF4E001BE027 /* Pods-Heist.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Heist.release.xcconfig"; path = "Target Support Files/Pods-Heist/Pods-Heist.release.xcconfig"; sourceTree = "<group>"; };
+		9BF18C3C77B66966B400816D /* Pods_Heist.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Heist.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C76B4E226236DDA00A85CC3 /* AppPermissions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPermissions.swift; sourceTree = "<group>"; };
 		9C9E9C15261F78E90012FBC4 /* Heist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Heist.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C9E9C18261F78E90012FBC4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -41,17 +41,17 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				818DB7A705BF0426F1DF9F8B /* Pods_Heist.framework in Frameworks */,
+				73D6996FA16E145ACB94CEE7 /* Pods_Heist.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0308F36E4398C9B43174E2BE /* Frameworks */ = {
+		74D9324A83BFD47604EF5D23 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				889F0DBBB9DDB83399EB089E /* Pods_Heist.framework */,
+				9BF18C3C77B66966B400816D /* Pods_Heist.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -70,7 +70,7 @@
 				9C9E9C17261F78E90012FBC4 /* Heist */,
 				9C9E9C16261F78E90012FBC4 /* Products */,
 				E46BD4F8C96FA3C85706B5EF /* Pods */,
-				0308F36E4398C9B43174E2BE /* Frameworks */,
+				74D9324A83BFD47604EF5D23 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -113,7 +113,6 @@
 				6771AF835B6E0DFB64750A3D /* Pods-Heist.debug.xcconfig */,
 				88EAAEB73F59CF4E001BE027 /* Pods-Heist.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -128,6 +127,8 @@
 				9C9E9C11261F78E90012FBC4 /* Sources */,
 				9C9E9C12261F78E90012FBC4 /* Frameworks */,
 				9C9E9C13261F78E90012FBC4 /* Resources */,
+				BE10D9B31F5612ECEA70AF5D /* [CP] Embed Pods Frameworks */,
+				CAA76150D07142C53B82DED1 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -204,6 +205,40 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		BE10D9B31F5612ECEA70AF5D /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Heist/Pods-Heist-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Heist/Pods-Heist-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Heist/Pods-Heist-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		CAA76150D07142C53B82DED1 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Heist/Pods-Heist-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Heist/Pods-Heist-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Heist/Pods-Heist-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */

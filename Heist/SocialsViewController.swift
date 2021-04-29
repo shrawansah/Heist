@@ -7,8 +7,9 @@
 
 import UIKit
 import WebKit
+import GoogleSignIn
 
-class SocialsViewController: UIViewController, WKNavigationDelegate {
+class SocialsViewController: UIViewController, WKNavigationDelegate, GIDSignInDelegate {
     
     var webView = WKWebView()
     var linkedInData = [String:Any]()
@@ -47,6 +48,110 @@ class SocialsViewController: UIViewController, WKNavigationDelegate {
     @IBAction func instagramButtonPressed(_ sender: Any) {
     }
     
+    @IBAction func googlebuttonPressed(_ sender: Any) {
+        GIDSignIn.sharedInstance().delegate = self
+        GIDSignIn.sharedInstance().presentingViewController = self
+        GIDSignIn.sharedInstance().scopes = ["https://www.googleapis.com/auth/calendar", "https://www.googleapis.com/auth/contacts.readonly"]
+        
+        // Initialize sign-in
+        GIDSignIn.sharedInstance().clientID = "801584951626-kr30p8ftn197l0umuccjcsqrr1nm2i6j.apps.googleusercontent.com"
+        GIDSignIn.sharedInstance()?.presentingViewController = self
+        
+        // Automatically sign in the user.
+        GIDSignIn.sharedInstance()?.restorePreviousSignIn()
+        
+        GIDSignIn.sharedInstance()?.signIn()
+
+    }
+    
+    
+    /**
+     Google Sign in delegates
+     */
+    var window: UIWindow?
+
+    // [START didfinishlaunching]
+    func application(_ application: UIApplication,
+                     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+      // Initialize sign-in
+      GIDSignIn.sharedInstance().clientID = "801584951626-kr30p8ftn197l0umuccjcsqrr1nm2i6j.apps.googleusercontent.com"
+      GIDSignIn.sharedInstance().delegate = self
+      GIDSignIn.sharedInstance()?.restorePreviousSignIn()
+
+      return true
+    }
+    // [END didfinishlaunching]
+    
+    
+    // [START openurl]
+    func application(_ application: UIApplication,
+                     open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
+      return GIDSignIn.sharedInstance().handle(url)
+    }
+    // [END openurl]
+    
+    
+    // [START openurl_new]
+    @available(iOS 9.0, *)
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any]) -> Bool {
+      return GIDSignIn.sharedInstance().handle(url)
+    }
+    // [END openurl_new]
+    
+    
+    // [START signin_handler]
+    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!,
+              withError error: Error!) {
+      if let error = error {
+        if (error as NSError).code == GIDSignInErrorCode.hasNoAuthInKeychain.rawValue {
+          print("The user has not signed in before or they have since signed out.")
+        } else {
+          print("\(error.localizedDescription)")
+        }
+        // [START_EXCLUDE silent]
+        NotificationCenter.default.post(
+          name: Notification.Name(rawValue: "ToggleAuthUINotification"), object: nil, userInfo: nil)
+        // [END_EXCLUDE]
+        return
+      }
+        
+      // Perform any operations on signed in user here.
+      let userId = user.userID                  // For client-side use only!
+      let idToken = user.authentication.idToken // Safe to send to the server
+      let fullName = user.profile.name
+      let givenName = user.profile.givenName
+      let familyName = user.profile.familyName
+      let email = user.profile.email
+      
+        // [START_EXCLUDE]
+      NotificationCenter.default.post(
+        name: Notification.Name(rawValue: "ToggleAuthUINotification"),
+        object: nil,
+        userInfo: ["statusText": "Signed in user:\n\(fullName!)"])
+      // [END_EXCLUDE]
+    }
+    // [END signin_handler]
+    
+    
+    // [START disconnect_handler]
+    func sign(_ signIn: GIDSignIn!, didDisconnectWith user: GIDGoogleUser!,
+              withError error: Error!) {
+      // Perform any operations when the user disconnects from app here.
+      // [START_EXCLUDE]
+      NotificationCenter.default.post(
+        name: Notification.Name(rawValue: "ToggleAuthUINotification"),
+        object: nil,
+        userInfo: ["statusText": "User has disconnected."])
+      // [END_EXCLUDE]
+    }
+    // [END disconnect_handler]
+    
+    /**
+     Google Sign in delegates ends
+     */
+    
+    
+    
     
     
     /**
@@ -70,6 +175,10 @@ class SocialsViewController: UIViewController, WKNavigationDelegate {
         decisionHandler(.allow)
         return
     }
+    /**
+     Webview deligates ends
+     */
+    
     
     
     
@@ -213,4 +322,7 @@ class SocialsViewController: UIViewController, WKNavigationDelegate {
         }
         task.resume()
     }
+    /**
+    LinkedIn Deligates
+     */
 }
