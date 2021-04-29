@@ -1,0 +1,6 @@
+framework module Pods_Heist {
+  umbrella header "Pods-Heist-umbrella.h"
+
+  export *
+  module * { export * }
+}
