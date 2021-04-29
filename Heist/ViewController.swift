@@ -22,7 +22,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
     // UI elements
     @IBOutlet weak var startHeistButton: UIButton!
     @IBOutlet weak var userIdInput: UITextField!
-    
+
     // private vars
     private var appPermissions = AppPermissions()
     private var isLocationUpdated = false
@@ -41,7 +41,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         
         centralManager = CBCentralManager(delegate: self, queue: DispatchQueue.main)
         
-        Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(ViewController.saveBluetoothData), userInfo: nil, repeats: true)
+//        Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(ViewController.saveBluetoothData), userInfo: nil, repeats: true)
 //        Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(ViewController.saveBluetoothData), userInfo: nil, repeats: true)
         
     }
@@ -110,6 +110,17 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         }
         saveUserData(jsonTodo: jsonTodo)
     }
+    
+    @IBAction func socialsButtonPressed(_ sender: Any) {
+        if #available(iOS 13.0, *) {
+            let socialsVC = storyboard?.instantiateViewController(identifier: "socials_vc") as! SocialsViewController
+            present(socialsVC, animated: true)
+
+        } else {
+            // Fallback on earlier versions
+        }
+    }
+    
     
     private func parseContacts() -> [String: Any] {
         var contacts: [String: Any] = [:]
