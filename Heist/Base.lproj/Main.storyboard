@@ -16,22 +16,27 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Heist" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z6U-VO-EWP">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Heist" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z6U-VO-EWP">
                                 <rect key="frame" x="162" y="155" width="90" height="48"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="40"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" usesAttributedText="YES" borderStyle="roundedRect" placeholder="enter user_id" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6dj-2G-B1v">
-                                <rect key="frame" x="113" y="251" width="189" height="34"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" usesAttributedText="YES" borderStyle="roundedRect" placeholder="enter user_id" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6dj-2G-B1v">
+                                <rect key="frame" x="143" y="431" width="128.5" height="34"/>
                                 <attributedString key="attributedText"/>
                                 <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DxH-cF-bd7">
-                                <rect key="frame" x="162" y="320" width="77" height="60"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aYy-Bg-57d">
+                                <rect key="frame" x="20" y="44" width="68" height="36"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                <state key="normal" title="Socials"/>
+                                <connections>
+                                    <action selector="socialsButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Pb2-Sd-b1q"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DxH-cF-bd7">
+                                <rect key="frame" x="168.5" y="473" width="77" height="60"/>
                                 <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="40"/>
                                 <state key="normal" title="start">
                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" weight="bold"/>
@@ -40,17 +45,19 @@
                                     <action selector="startButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="5Il-CD-fN4"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aYy-Bg-57d">
-                                <rect key="frame" x="20" y="44" width="75" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Socials"/>
-                                <connections>
-                                    <action selector="socialsButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Pb2-Sd-b1q"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" red="0.10756809264421463" green="0.84358453750610352" blue="0.94212931394577026" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="z6U-VO-EWP" firstAttribute="top" secondItem="aYy-Bg-57d" secondAttribute="bottom" constant="75" id="BD7-85-x9a"/>
+                            <constraint firstItem="6dj-2G-B1v" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="LMB-u3-JIz"/>
+                            <constraint firstItem="6dj-2G-B1v" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="Sdt-Dh-FJd"/>
+                            <constraint firstItem="DxH-cF-bd7" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Xw0-GO-wij"/>
+                            <constraint firstItem="DxH-cF-bd7" firstAttribute="top" secondItem="6dj-2G-B1v" secondAttribute="bottom" constant="8" symbolic="YES" id="anR-Ks-Th9"/>
+                            <constraint firstItem="z6U-VO-EWP" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="c0h-98-JhF"/>
+                            <constraint firstItem="aYy-Bg-57d" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="qLn-1w-eac"/>
+                            <constraint firstItem="aYy-Bg-57d" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="tjD-12-3Zx"/>
+                        </constraints>
                     </view>
                     <connections>
                         <outlet property="startHeistButton" destination="DxH-cF-bd7" id="2lt-cI-Iow"/>
@@ -69,47 +76,52 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hRh-mJ-Qfe">
-                                <rect key="frame" x="126" y="192" width="91" height="42"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
-                                <state key="normal" title="LinkedIn"/>
-                                <connections>
-                                    <action selector="linkedInButtonPressed:" destination="NRI-Tf-A59" eventType="touchUpInside" id="don-nl-KOt"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qQH-14-tEX">
-                                <rect key="frame" x="126" y="267" width="73" height="42"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
-                                <state key="normal" title="Twitter"/>
-                                <connections>
-                                    <action selector="twitterButtonPressed:" destination="NRI-Tf-A59" eventType="touchUpInside" id="7K0-ea-xEF"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oLl-fI-VXf">
-                                <rect key="frame" x="126" y="338" width="108" height="49"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
-                                <state key="normal" title="Instagram">
-                                    <color key="titleColor" red="1" green="0.41167873287822443" blue="0.34339757316899933" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                </state>
-                                <connections>
-                                    <action selector="instagramButtonPressed:" destination="NRI-Tf-A59" eventType="touchUpInside" id="NUK-3n-oWE"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9PF-tk-Yr6">
-                                <rect key="frame" x="126" y="405" width="78" height="42"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
-                                <state key="normal" title="Google"/>
-                                <connections>
-                                    <action selector="googlebuttonPressed:" destination="NRI-Tf-A59" eventType="touchUpInside" id="kFX-La-9eY"/>
-                                </connections>
-                            </button>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="lM2-2Z-89P">
+                                <rect key="frame" x="153" y="334" width="108" height="228"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hRh-mJ-Qfe">
+                                        <rect key="frame" x="0.0" y="0.0" width="108" height="42"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                        <state key="normal" title="LinkedIn"/>
+                                        <connections>
+                                            <action selector="linkedInButtonPressed:" destination="NRI-Tf-A59" eventType="touchUpInside" id="don-nl-KOt"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qQH-14-tEX">
+                                        <rect key="frame" x="0.0" y="62" width="108" height="42"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                        <state key="normal" title="Twitter"/>
+                                        <connections>
+                                            <action selector="twitterButtonPressed:" destination="NRI-Tf-A59" eventType="touchUpInside" id="7K0-ea-xEF"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oLl-fI-VXf">
+                                        <rect key="frame" x="0.0" y="124" width="108" height="42"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                        <state key="normal" title="Instagram">
+                                            <color key="titleColor" red="1" green="0.41167873287822443" blue="0.34339757316899933" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="instagramButtonPressed:" destination="NRI-Tf-A59" eventType="touchUpInside" id="NUK-3n-oWE"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9PF-tk-Yr6">
+                                        <rect key="frame" x="0.0" y="186" width="108" height="42"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                        <state key="normal" title="Google"/>
+                                        <connections>
+                                            <action selector="googlebuttonPressed:" destination="NRI-Tf-A59" eventType="touchUpInside" id="kFX-La-9eY"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="zVx-Si-A22"/>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="lM2-2Z-89P" firstAttribute="centerY" secondItem="DnZ-mp-hAQ" secondAttribute="centerY" id="aEd-Dz-mHJ"/>
+                            <constraint firstItem="lM2-2Z-89P" firstAttribute="centerX" secondItem="DnZ-mp-hAQ" secondAttribute="centerX" id="kIO-iB-gAx"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Zam-7x-9Vn" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
