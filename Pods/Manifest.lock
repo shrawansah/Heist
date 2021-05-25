@@ -13,10 +13,12 @@ PODS:
     - GTMSessionFetcher/Core (~> 1.5)
   - GTMSessionFetcher/Core (1.5.0)
   - IQKeyboardManagerSwift (6.3.0)
+  - Swifter (2.5.0)
 
 DEPENDENCIES:
   - GoogleSignIn (= 5.0.1)
   - IQKeyboardManagerSwift (= 6.3.0)
+  - Swifter (from `https://github.com/mattdonnelly/Swifter.git`)
 
 SPEC REPOS:
   trunk:
@@ -26,13 +28,23 @@ SPEC REPOS:
     - GTMSessionFetcher
     - IQKeyboardManagerSwift
 
+EXTERNAL SOURCES:
+  Swifter:
+    :git: https://github.com/mattdonnelly/Swifter.git
+
+CHECKOUT OPTIONS:
+  Swifter:
+    :commit: 50682ebe64e4c08f18957ccfd16888f035c20755
+    :git: https://github.com/mattdonnelly/Swifter.git
+
 SPEC CHECKSUMS:
   AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
   GoogleSignIn: 3a51b9bb8e48b635fd7f4272cee06ca260345b86
   GTMAppAuth: ad5c2b70b9a8689e1a04033c9369c4915bfcbe89
   GTMSessionFetcher: b3503b20a988c4e20cc189aa798fd18220133f52
   IQKeyboardManagerSwift: a8228c257614af98743b4cd8584637025f36358f
+  Swifter: 4c2f8cf320c2f751c10128f841d8e9bd8609d988
 
-PODFILE CHECKSUM: a8ab23f2749fb254c8b33ef55fc07410c9155259
+PODFILE CHECKSUM: 896fcd0f3e2c981ab17438a95bd612e02ee76361
 
 COCOAPODS: 1.10.1

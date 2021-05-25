@@ -85,16 +85,15 @@
 		9C9E9C17261F78E90012FBC4 /* Heist */ = {
 			isa = PBXGroup;
 			children = (
+				E4B6735D265C02D100895ECB /* ViewControllers */,
 				E462413426384DE3004A52BA /* Configs */,
 				9C76B4E126236DAC00A85CC3 /* Classes */,
 				9C9E9C18261F78E90012FBC4 /* AppDelegate.swift */,
 				9C9E9C1A261F78E90012FBC4 /* SceneDelegate.swift */,
-				9C9E9C1C261F78E90012FBC4 /* ViewController.swift */,
 				9C9E9C1E261F78E90012FBC4 /* Main.storyboard */,
 				9C9E9C21261F78EC0012FBC4 /* Assets.xcassets */,
 				9C9E9C23261F78EC0012FBC4 /* LaunchScreen.storyboard */,
 				9C9E9C26261F78EC0012FBC4 /* Info.plist */,
-				E4624143263863B3004A52BA /* SocialsViewController.swift */,
 			);
 			path = Heist;
 			sourceTree = "<group>";
@@ -114,6 +113,15 @@
 				88EAAEB73F59CF4E001BE027 /* Pods-Heist.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		E4B6735D265C02D100895ECB /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				9C9E9C1C261F78E90012FBC4 /* ViewController.swift */,
+				E4624143263863B3004A52BA /* SocialsViewController.swift */,
+			);
+			path = ViewControllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

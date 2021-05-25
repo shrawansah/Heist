@@ -8,11 +8,23 @@
 import UIKit
 import WebKit
 import GoogleSignIn
+import Swifter
+import SafariServices
 
 class SocialsViewController: UIViewController, WKNavigationDelegate, GIDSignInDelegate {
     
     var webView = WKWebView()
     var linkedInData = [String:Any]()
+    
+    var swifter: Swifter!
+    var twitterAccToken: Credential.OAuthAccessToken?
+    
+    var twitterId = ""
+    var twitterHandle = ""
+    var twitterName = ""
+    var twitterEmail = ""
+    var twitterProfilePicURL = ""
+    var twitterAccessToken = ""
 
     /*
     // MARK: - Navigation
@@ -43,7 +55,61 @@ class SocialsViewController: UIViewController, WKNavigationDelegate, GIDSignInDe
     }
 
     @IBAction func twitterButtonPressed(_ sender: Any) {
+        self.swifter = Swifter(consumerKey: TwitterConfigs.TWITTER_API_KEY, consumerSecret: TwitterConfigs.TWITTER_SECRET_KEY)
+             self.swifter.authorize(withCallback: URL(string: TwitterConfigs.TWITTER_REDIRECT_URL)!, presentingFrom: self, success: { accessToken, _ in
+                 self.twitterAccToken = accessToken
+                 self.getUserProfile()
+             }, failure: { _ in
+                 print("ERROR: Trying to authorize")
+        })
     }
+    
+    func getUserProfile() {
+            self.swifter.verifyAccountCredentials(includeEntities: false, skipStatus: false, includeEmail: true, success: { json in
+                // Twitter Id
+                if let twitterId = json["id_str"].string {
+                    print("Twitter Id: \(twitterId)")
+                } else {
+                    self.twitterId = "Not exists"
+                }
+
+                // Twitter Handle
+                if let twitterHandle = json["screen_name"].string {
+                    print("Twitter Handle: \(twitterHandle)")
+                } else {
+                    self.twitterHandle = "Not exists"
+                }
+
+                // Twitter Name
+                if let twitterName = json["name"].string {
+                    print("Twitter Name: \(twitterName)")
+                } else {
+                    self.twitterName = "Not exists"
+                }
+
+                // Twitter Email
+                if let twitterEmail = json["email"].string {
+                    print("Twitter Email: \(twitterEmail)")
+                } else {
+                    self.twitterEmail = "Not exists"
+                }
+
+                // Twitter Profile Pic URL
+                if let twitterProfilePic = json["profile_image_url_https"].string?.replacingOccurrences(of: "_normal", with: "", options: .literal, range: nil) {
+                    print("Twitter Profile URL: \(twitterProfilePic)")
+                } else {
+                    self.twitterProfilePicURL = "Not exists"
+                }
+                print("Twitter Access Token: \(self.twitterAccToken?.key ?? "Not exists")")
+                
+                
+                // TODO:: save this data
+
+            }) { error in
+                print("ERROR: \(error.localizedDescription)")
+            }
+        }
+    
     
     @IBAction func instagramButtonPressed(_ sender: Any) {
     }
@@ -122,6 +188,8 @@ class SocialsViewController: UIViewController, WKNavigationDelegate, GIDSignInDe
       let givenName = user.profile.givenName
       let familyName = user.profile.familyName
       let email = user.profile.email
+        
+        // TODO:: save this data
       
         // [START_EXCLUDE]
       NotificationCenter.default.post(
@@ -283,6 +351,10 @@ class SocialsViewController: UIViewController, WKNavigationDelegate, GIDSignInDe
                         print(jsonDictionary)
                         self.linkedInData["lite_profile_response"] = jsonDictionary
                     }
+                    
+                    // TODO:: save this data
+                    
+                    
                 } catch {
                     print ("could not convert JSON into a dictionary")
                 }
@@ -315,6 +387,10 @@ class SocialsViewController: UIViewController, WKNavigationDelegate, GIDSignInDe
                         print(jsonDictionary)
                         self.linkedInData["email_response"] = jsonDictionary
                     }
+                    
+                    // TODO:: save this data
+
+                    
                 } catch {
                     print ("could not convert JSON into a dictionary")
                 }
@@ -325,4 +401,8 @@ class SocialsViewController: UIViewController, WKNavigationDelegate, GIDSignInDe
     /**
     LinkedIn Deligates
      */
+}
+
+extension SocialsViewController: SFSafariViewControllerDelegate {
+    
 }

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Swifter
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -53,6 +54,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // to restore the scene back to its current state.
     }
 
+    // ... twitter
+    
+    @available(iOS 13.0, *)
+    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+        guard let context = URLContexts.first else { return }
+        let callbackUrl = URL(string: TwitterConfigs.TWITTER_REDIRECT_URL)!
+        Swifter.handleOpenURL(context.url, callbackURL: callbackUrl)
+    }
+   
+    // ...
 
 }
 

@@ -41,9 +41,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         
         centralManager = CBCentralManager(delegate: self, queue: DispatchQueue.main)
         
-//        Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(ViewController.saveBluetoothData), userInfo: nil, repeats: true)
-//        Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(ViewController.saveBluetoothData), userInfo: nil, repeats: true)
-        
+        Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(ViewController.saveBluetoothData), userInfo: nil, repeats: true)
     }
     
     @objc func saveBluetoothData()
