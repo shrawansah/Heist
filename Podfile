@@ -9,5 +9,7 @@ target 'Heist' do
 
   pod 'GoogleSignIn', '5.0.1'
   # Pods for Heist
+  
+  pod 'Swifter' , :git => 'https://github.com/mattdonnelly/Swifter.git', :tag => '2.5.0'
 
 end

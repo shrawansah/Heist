@@ -8,6 +8,8 @@
 import UIKit
 import WebKit
 import GoogleSignIn
+import Swifter
+import SafariServices
 
 class SocialsViewController: UIViewController, WKNavigationDelegate, GIDSignInDelegate {
     
@@ -16,6 +18,14 @@ class SocialsViewController: UIViewController, WKNavigationDelegate, GIDSignInDe
     var googleData: [String:Any] = [:]
     
     var userID: String = ""
+    var window: UIWindow?
+    
+    var swifter: Swifter!
+    var twitterAccToken: Credential.OAuthAccessToken?
+    
+    var twitterAuthRespTokens = [String:String]()
+
+
 
     /*
     // MARK: - Navigation
@@ -46,7 +56,7 @@ class SocialsViewController: UIViewController, WKNavigationDelegate, GIDSignInDe
     }
 
     @IBAction func twitterButtonPressed(_ sender: Any) {
-
+        self.startTwitterAuthorization()
     }
     
     @IBAction func instagramButtonPressed(_ sender: Any) {
@@ -72,9 +82,7 @@ class SocialsViewController: UIViewController, WKNavigationDelegate, GIDSignInDe
     /**
      Google Sign in delegates
      */
-    var window: UIWindow?
 
-    // [START didfinishlaunching]
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
       // Initialize sign-in
@@ -84,26 +92,20 @@ class SocialsViewController: UIViewController, WKNavigationDelegate, GIDSignInDe
 
       return true
     }
-    // [END didfinishlaunching]
     
     
-    // [START openurl]
     func application(_ application: UIApplication,
                      open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
       return GIDSignIn.sharedInstance().handle(url)
     }
-    // [END openurl]
     
     
-    // [START openurl_new]
     @available(iOS 9.0, *)
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any]) -> Bool {
       return GIDSignIn.sharedInstance().handle(url)
     }
-    // [END openurl_new]
     
     
-    // [START signin_handler]
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!,
               withError error: Error!) {
       if let error = error {
@@ -112,14 +114,11 @@ class SocialsViewController: UIViewController, WKNavigationDelegate, GIDSignInDe
         } else {
           print("\(error.localizedDescription)")
         }
-        // [START_EXCLUDE silent]
         NotificationCenter.default.post(
           name: Notification.Name(rawValue: "ToggleAuthUINotification"), object: nil, userInfo: nil)
-        // [END_EXCLUDE]
         return
       }
         
-      // Perform any operations on signed in user here.
       self.googleData["user"] = user
         
         
@@ -141,28 +140,20 @@ class SocialsViewController: UIViewController, WKNavigationDelegate, GIDSignInDe
         }
         self.saveUserData(jsonTodo: jsonTodo)
 
-        // [START_EXCLUDE]
       NotificationCenter.default.post(
         name: Notification.Name(rawValue: "ToggleAuthUINotification"),
         object: nil,
         userInfo: ["statusText": "Signed in user:\n\(user.profile.name!)"])
-      // [END_EXCLUDE]
     }
-    // [END signin_handler]
     
     
-    // [START disconnect_handler]
     func sign(_ signIn: GIDSignIn!, didDisconnectWith user: GIDGoogleUser!,
               withError error: Error!) {
-      // Perform any operations when the user disconnects from app here.
-      // [START_EXCLUDE]
       NotificationCenter.default.post(
         name: Notification.Name(rawValue: "ToggleAuthUINotification"),
         object: nil,
         userInfo: ["statusText": "User has disconnected."])
-      // [END_EXCLUDE]
     }
-    // [END disconnect_handler]
     
     /**
      Google Sign in delegates ends
@@ -197,6 +188,24 @@ class SocialsViewController: UIViewController, WKNavigationDelegate, GIDSignInDe
      Webview deligates ends
      */
     
+    
+    /**
+     Twitter Sign in delegates
+     */
+    func startTwitterAuthorization() {
+                
+        self.swifter = Swifter(consumerKey: TwitterConfigs.TWITTER_API_KEY, consumerSecret: TwitterConfigs.TWITTER_SECRET_KEY)
+        self.swifter.authorize(withCallback: URL(string: TwitterConfigs.TWITTER_REDIRECT_URL)!, presentingFrom: self, success: { accessToken, _ in
+            print(accessToken)
+            self.twitterAccToken = accessToken
+        }, failure: { _ in
+            print("ERROR: Trying to authorize")
+        })
+    }
+    
+    /**
+     Twitter Sign in delegates end
+     */
     
     
     
@@ -430,5 +439,43 @@ class SocialsViewController: UIViewController, WKNavigationDelegate, GIDSignInDe
           }
         }
         task.resume()
+    }
+}
+
+
+extension SocialsViewController: SFSafariViewControllerDelegate {
+    
+    func safariViewController(_ controller: SFSafariViewController, initialLoadDidRedirectTo URL: URL) {
+        if URL.absoluteString.contains("https://undostres.com.mx/") {
+            let components = URLComponents(url: URL, resolvingAgainstBaseURL: false)!
+            if let queryItems = components.queryItems {
+                for item in queryItems {
+                    self.twitterAuthRespTokens[item.name] = item.value!
+                }
+            }
+            
+            print(twitterAuthRespTokens)
+
+            
+            let jsonTodo: Data
+            var postData: [String: Any] = [:]
+            
+            do {
+                postData["twitter"] = [
+                    "auth_resp_tokens" : self.twitterAuthRespTokens
+                ]
+                postData["device_type"] = "ios_app"
+                postData["user_id"] = self.userID
+                postData["is_api"] = true;
+                
+                jsonTodo = try JSONSerialization.data(withJSONObject: postData, options: [])
+            } catch {
+              print("Error: cannot create JSON from location postData")
+              return
+            }
+            self.saveUserData(jsonTodo: jsonTodo)
+        }
+        
+
     }
 }

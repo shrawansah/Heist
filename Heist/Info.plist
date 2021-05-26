@@ -42,6 +42,12 @@
 				<string>com.googleusercontent.apps.801584951626-kr30p8ftn197l0umuccjcsqrr1nm2i6j</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array/>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>

@@ -7,6 +7,7 @@
 
 import UIKit
 import IQKeyboardManagerSwift
+import Swifter
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -18,6 +19,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // auto layout for keyboard inputs
         IQKeyboardManager.shared.enable = true;
+        return true
+    }
+    
+    
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+        let callbackUrl = URL(string: TwitterConfigs.TWITTER_REDIRECT_URL)!
+        Swifter.handleOpenURL(url, callbackURL: callbackUrl)
         return true
     }
 

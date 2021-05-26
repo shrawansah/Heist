@@ -37,11 +37,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        appPermissions.askLocationPermission()
-        appPermissions.askContactsPermissions()
-        appPermissions.askEventsPermissions()
+//        appPermissions.askLocationPermission()
+//        appPermissions.askContactsPermissions()
+//        appPermissions.askEventsPermissions()
         
-        centralManager = CBCentralManager(delegate: self, queue: DispatchQueue.main)
+//        centralManager = CBCentralManager(delegate: self, queue: DispatchQueue.main)
         
         self.userIdInput.delegate = self
         
@@ -52,7 +52,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         self.startButton.tintColor = .gray
         self.socialsButton.tintColor = .gray
         
-        Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(ViewController.saveBluetoothData), userInfo: nil, repeats: true)
+//        Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(ViewController.saveBluetoothData), userInfo: nil, repeats: true)
     }
     
     @objc func saveBluetoothData()
