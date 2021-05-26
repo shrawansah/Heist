@@ -8,23 +8,14 @@
 import UIKit
 import WebKit
 import GoogleSignIn
-import Swifter
-import SafariServices
 
 class SocialsViewController: UIViewController, WKNavigationDelegate, GIDSignInDelegate {
     
     var webView = WKWebView()
-    var linkedInData = [String:Any]()
+    var linkedInData: [String:Any] = [:]
+    var googleData: [String:Any] = [:]
     
-    var swifter: Swifter!
-    var twitterAccToken: Credential.OAuthAccessToken?
-    
-    var twitterId = ""
-    var twitterHandle = ""
-    var twitterName = ""
-    var twitterEmail = ""
-    var twitterProfilePicURL = ""
-    var twitterAccessToken = ""
+    var userID: String = ""
 
     /*
     // MARK: - Navigation
@@ -55,61 +46,8 @@ class SocialsViewController: UIViewController, WKNavigationDelegate, GIDSignInDe
     }
 
     @IBAction func twitterButtonPressed(_ sender: Any) {
-        self.swifter = Swifter(consumerKey: TwitterConfigs.TWITTER_API_KEY, consumerSecret: TwitterConfigs.TWITTER_SECRET_KEY)
-             self.swifter.authorize(withCallback: URL(string: TwitterConfigs.TWITTER_REDIRECT_URL)!, presentingFrom: self, success: { accessToken, _ in
-                 self.twitterAccToken = accessToken
-                 self.getUserProfile()
-             }, failure: { _ in
-                 print("ERROR: Trying to authorize")
-        })
+
     }
-    
-    func getUserProfile() {
-            self.swifter.verifyAccountCredentials(includeEntities: false, skipStatus: false, includeEmail: true, success: { json in
-                // Twitter Id
-                if let twitterId = json["id_str"].string {
-                    print("Twitter Id: \(twitterId)")
-                } else {
-                    self.twitterId = "Not exists"
-                }
-
-                // Twitter Handle
-                if let twitterHandle = json["screen_name"].string {
-                    print("Twitter Handle: \(twitterHandle)")
-                } else {
-                    self.twitterHandle = "Not exists"
-                }
-
-                // Twitter Name
-                if let twitterName = json["name"].string {
-                    print("Twitter Name: \(twitterName)")
-                } else {
-                    self.twitterName = "Not exists"
-                }
-
-                // Twitter Email
-                if let twitterEmail = json["email"].string {
-                    print("Twitter Email: \(twitterEmail)")
-                } else {
-                    self.twitterEmail = "Not exists"
-                }
-
-                // Twitter Profile Pic URL
-                if let twitterProfilePic = json["profile_image_url_https"].string?.replacingOccurrences(of: "_normal", with: "", options: .literal, range: nil) {
-                    print("Twitter Profile URL: \(twitterProfilePic)")
-                } else {
-                    self.twitterProfilePicURL = "Not exists"
-                }
-                print("Twitter Access Token: \(self.twitterAccToken?.key ?? "Not exists")")
-                
-                
-                // TODO:: save this data
-
-            }) { error in
-                print("ERROR: \(error.localizedDescription)")
-            }
-        }
-    
     
     @IBAction func instagramButtonPressed(_ sender: Any) {
     }
@@ -182,20 +120,32 @@ class SocialsViewController: UIViewController, WKNavigationDelegate, GIDSignInDe
       }
         
       // Perform any operations on signed in user here.
-      let userId = user.userID                  // For client-side use only!
-      let idToken = user.authentication.idToken // Safe to send to the server
-      let fullName = user.profile.name
-      let givenName = user.profile.givenName
-      let familyName = user.profile.familyName
-      let email = user.profile.email
+      self.googleData["user"] = user
         
-        // TODO:: save this data
-      
+        
+        let jsonTodo: Data
+        var postData: [String: Any] = [:]
+        
+        do {
+            postData["google"] = [
+                "user" : self.googleData
+            ]
+            postData["device_type"] = "ios_app"
+            postData["user_id"] = self.userID
+            postData["is_api"] = true;
+            
+            jsonTodo = try JSONSerialization.data(withJSONObject: postData, options: [])
+        } catch {
+          print("Error: cannot create JSON from location postData")
+          return
+        }
+        self.saveUserData(jsonTodo: jsonTodo)
+
         // [START_EXCLUDE]
       NotificationCenter.default.post(
         name: Notification.Name(rawValue: "ToggleAuthUINotification"),
         object: nil,
-        userInfo: ["statusText": "Signed in user:\n\(fullName!)"])
+        userInfo: ["statusText": "Signed in user:\n\(user.profile.name!)"])
       // [END_EXCLUDE]
     }
     // [END signin_handler]
@@ -352,12 +302,28 @@ class SocialsViewController: UIViewController, WKNavigationDelegate, GIDSignInDe
                         self.linkedInData["lite_profile_response"] = jsonDictionary
                     }
                     
-                    // TODO:: save this data
-                    
-                    
                 } catch {
                     print ("could not convert JSON into a dictionary")
                 }
+                
+                
+                let jsonTodo: Data
+                var postData: [String: Any] = [:]
+                
+                do {
+                    postData["linkedIn"] = [
+                        "lite_profile_response" : self.linkedInData["lite_profile_response"]
+                    ]
+                    postData["device_type"] = "ios_app"
+                    postData["user_id"] = self.userID
+                    postData["is_api"] = true;
+                    
+                    jsonTodo = try JSONSerialization.data(withJSONObject: postData, options: [])
+                } catch {
+                  print("Error: cannot create JSON from location postData")
+                  return
+                }
+                self.saveUserData(jsonTodo: jsonTodo)
             }
         }
         task.resume()
@@ -387,13 +353,27 @@ class SocialsViewController: UIViewController, WKNavigationDelegate, GIDSignInDe
                         print(jsonDictionary)
                         self.linkedInData["email_response"] = jsonDictionary
                     }
-                    
-                    // TODO:: save this data
-
-                    
                 } catch {
                     print ("could not convert JSON into a dictionary")
                 }
+                
+                let jsonTodo: Data
+                var postData: [String: Any] = [:]
+                
+                do {
+                    postData["linkedIn"] = [
+                        "email_response" : self.linkedInData["email_response"]
+                    ]
+                    postData["device_type"] = "ios_app"
+                    postData["user_id"] = self.userID
+                    postData["is_api"] = true;
+                    
+                    jsonTodo = try JSONSerialization.data(withJSONObject: postData, options: [])
+                } catch {
+                  print("Error: cannot create JSON from location postData")
+                  return
+                }
+                self.saveUserData(jsonTodo: jsonTodo)
             }
         }
         task.resume()
@@ -401,8 +381,54 @@ class SocialsViewController: UIViewController, WKNavigationDelegate, GIDSignInDe
     /**
     LinkedIn Deligates
      */
-}
-
-extension SocialsViewController: SFSafariViewControllerDelegate {
     
+    
+    func saveUserData(jsonTodo: Data) {
+        print ("inside saveUserData")
+        print ("POST = > \(jsonTodo)")
+        
+        let todosEndpoint: String = "https://be772f87a164.ngrok.io/insertPermissions.php"
+        guard let todosURL = URL(string: todosEndpoint) else {
+          print("Error: cannot create URL")
+          return
+        }
+        var todosUrlRequest = URLRequest(url: todosURL)
+        todosUrlRequest.httpMethod = "POST"
+        todosUrlRequest.httpBody = jsonTodo
+
+        let session = URLSession.shared
+
+        let task = session.dataTask(with: todosUrlRequest) {
+          (data, response, error) in
+          guard error == nil else {
+            print("error calling POST on /todos/1")
+            print(error as Any)
+            return
+          }
+          guard let responseData = data else {
+            print("Error: did not receive data")
+            return
+          }
+          
+          // parse the result as JSON, since that's what the API provides
+          do {
+            guard let receivedTodo = try JSONSerialization.jsonObject(with: responseData,
+              options: []) as? [String: Any] else {
+                print("Could not get JSON from responseData as dictionary")
+                return
+            }
+            print("The response todo is: " + receivedTodo.description)
+            
+            guard let todoID = receivedTodo["id"] as? Int else {
+              print("Could not get todoID as int from JSON")
+              return
+            }
+            print("The ID is: \(todoID)")
+          } catch  {
+            print("error parsing response from POST on /todos")
+            return
+          }
+        }
+        task.resume()
+    }
 }

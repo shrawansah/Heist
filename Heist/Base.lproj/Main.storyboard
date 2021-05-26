@@ -60,6 +60,8 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="socialsButton" destination="aYy-Bg-57d" id="X1N-Tx-A3p"/>
+                        <outlet property="startButton" destination="DxH-cF-bd7" id="UWf-aa-FXX"/>
                         <outlet property="startHeistButton" destination="DxH-cF-bd7" id="2lt-cI-Iow"/>
                         <outlet property="userIdInput" destination="6dj-2G-B1v" id="HAq-bX-F1E"/>
                     </connections>

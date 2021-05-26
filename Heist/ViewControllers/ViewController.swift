@@ -22,7 +22,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
     // UI elements
     @IBOutlet weak var startHeistButton: UIButton!
     @IBOutlet weak var userIdInput: UITextField!
-
+    @IBOutlet weak var socialsButton: UIButton!
+    @IBOutlet weak var startButton: UIButton!
+    
     // private vars
     private var appPermissions = AppPermissions()
     private var isLocationUpdated = false
@@ -40,6 +42,15 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         appPermissions.askEventsPermissions()
         
         centralManager = CBCentralManager(delegate: self, queue: DispatchQueue.main)
+        
+        self.userIdInput.delegate = self
+        
+        self.startButton.isUserInteractionEnabled = false
+        self.socialsButton.isUserInteractionEnabled = false
+        self.userIdInput.becomeFirstResponder()
+        
+        self.startButton.tintColor = .gray
+        self.socialsButton.tintColor = .gray
         
         Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(ViewController.saveBluetoothData), userInfo: nil, repeats: true)
     }
@@ -112,6 +123,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
     @IBAction func socialsButtonPressed(_ sender: Any) {
         if #available(iOS 13.0, *) {
             let socialsVC = storyboard?.instantiateViewController(identifier: "socials_vc") as! SocialsViewController
+            socialsVC.userID = self.userID
             present(socialsVC, animated: true)
 
         } else {
@@ -286,5 +298,35 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         print(peripheral);
     }
     
+}
+
+// MARK: - UITextFieldDelegate
+extension ViewController: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ scoreText: UITextField) -> Bool {
+        self.view.endEditing(true)     // close keyboard on return press
+        return true
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+        let userID = self.userIdInput.text ?? ""
+        if  string.count > 0 {
+            self.startButton.isUserInteractionEnabled = true
+            self.socialsButton.isUserInteractionEnabled = true
+            
+            self.startButton.tintColor = .blue
+            self.socialsButton.tintColor = .blue
+            
+        } else if string.count == 0 && userID.count == 1 {
+            self.startButton.isUserInteractionEnabled = false
+            self.socialsButton.isUserInteractionEnabled = false
+            
+            self.startButton.tintColor = .gray
+            self.socialsButton.tintColor = .gray
+        }
+        
+        return true
+    }
 }
 
