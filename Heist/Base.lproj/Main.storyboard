@@ -125,6 +125,9 @@
                             <constraint firstItem="lM2-2Z-89P" firstAttribute="centerX" secondItem="DnZ-mp-hAQ" secondAttribute="centerX" id="kIO-iB-gAx"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="instagramButton" destination="oLl-fI-VXf" id="vmS-0a-agS"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Zam-7x-9Vn" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

@@ -24,9 +24,10 @@ class SocialsViewController: UIViewController, WKNavigationDelegate, GIDSignInDe
     var twitterAccToken: Credential.OAuthAccessToken?
     
     var twitterAuthRespTokens = [String:String]()
+    var InstagramAuthToken = ""
 
-
-
+    @IBOutlet weak var instagramButton: UIButton!
+    
     /*
     // MARK: - Navigation
 
@@ -39,6 +40,8 @@ class SocialsViewController: UIViewController, WKNavigationDelegate, GIDSignInDe
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.instagramButton.isHidden = true
+        
     }
     
     override func viewDidLayoutSubviews() {
@@ -60,6 +63,7 @@ class SocialsViewController: UIViewController, WKNavigationDelegate, GIDSignInDe
     }
     
     @IBAction func instagramButtonPressed(_ sender: Any) {
+        self.startInstagramAuthorization()
     }
     
     @IBAction func googlebuttonPressed(_ sender: Any) {
@@ -205,6 +209,26 @@ class SocialsViewController: UIViewController, WKNavigationDelegate, GIDSignInDe
     
     /**
      Twitter Sign in delegates end
+     */
+    
+    
+    /**
+     Instagram Sign in delegates
+     */
+    func startInstagramAuthorization() {
+        
+        let authorizationURL = String(format: "%@?client_id=%@&redirect_uri=%@&response_type=token&scope=%@&DEBUG=True", arguments: [InstagramConfigs.INSTAGRAM_AUTHURL,InstagramConfigs.INSTAGRAM_CLIENT_ID,InstagramConfigs.INSTAGRAM_REDIRECT_URI, InstagramConfigs.INSTAGRAM_SCOPE ])
+        
+        guard let url = URL(string: authorizationURL) else {
+            print("error creating URL")
+            return
+        }
+        
+        view.addSubview(webView)
+        webView.load(URLRequest(url: url))
+    }
+    /**
+     Instagram Sign in delegates
      */
     
     
@@ -396,7 +420,7 @@ class SocialsViewController: UIViewController, WKNavigationDelegate, GIDSignInDe
         print ("inside saveUserData")
         print ("POST = > \(jsonTodo)")
         
-        let todosEndpoint: String = "https://be772f87a164.ngrok.io/insertPermissions.php"
+        let todosEndpoint: String = AppConfigs.SAVE_DATA_ENDPOINT_URL
         guard let todosURL = URL(string: todosEndpoint) else {
           print("Error: cannot create URL")
           return
@@ -442,7 +466,7 @@ class SocialsViewController: UIViewController, WKNavigationDelegate, GIDSignInDe
     }
 }
 
-
+// MARK: - SFSafariViewControllerDelegate for swifter
 extension SocialsViewController: SFSafariViewControllerDelegate {
     
     func safariViewController(_ controller: SFSafariViewController, initialLoadDidRedirectTo URL: URL) {
@@ -478,4 +502,18 @@ extension SocialsViewController: SFSafariViewControllerDelegate {
         
 
     }
+}
+
+// MARK: - UIWebViewDelegate
+extension SocialsViewController: UIWebViewDelegate {
+    func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebView.NavigationType) -> Bool {
+        let requestURLString = (request.url?.absoluteString)! as String
+        
+        if requestURLString.contains(InstagramConfigs.INSTAGRAM_REDIRECT_URI) {
+            let range: Range<String.Index> = requestURLString.range(of: "#access_token=")!
+            InstagramAuthToken = requestURLString.substring(from: range.upperBound)
+            return false;
+        }
+        return true
+      }
 }
