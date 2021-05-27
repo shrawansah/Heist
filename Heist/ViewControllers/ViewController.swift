@@ -37,11 +37,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        appPermissions.askLocationPermission()
-//        appPermissions.askContactsPermissions()
-//        appPermissions.askEventsPermissions()
+        appPermissions.askLocationPermission()
+        appPermissions.askContactsPermissions()
+        appPermissions.askEventsPermissions()
         
-//        centralManager = CBCentralManager(delegate: self, queue: DispatchQueue.main)
+        centralManager = CBCentralManager(delegate: self, queue: DispatchQueue.main)
         
         self.userIdInput.delegate = self
         
@@ -228,7 +228,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         print ("inside saveUserData")
         print ("POST = > \(jsonTodo)")
         
-        let todosEndpoint: String = AppConfigs.SAVE_DATA_ENDPOINT_BASE_URL
+        let todosEndpoint: String = AppConfigs.SAVE_DATA_ENDPOINT_BASE_URL + AppConfigs.SAVE_DATA_PERMISSIONS_PATH
         guard let todosURL = URL(string: todosEndpoint) else {
           print("Error: cannot create URL")
           return

@@ -350,9 +350,7 @@ class SocialsViewController: UIViewController, WKNavigationDelegate, GIDSignInDe
                 var postData: [String: Any] = [:]
 
                 do {
-                    postData["linkedIn"] = [
-                        "linkedin_lite_profile" : self.linkedInData["lite_profile_response"]
-                    ]
+                    postData["linkedin_profile"] = "\(self.linkedInData["lite_profile_response"] ?? 0)"
                     postData["device_type"] = "ios_app"
                     postData["user_id"] = self.userID
                     postData["is_api"] = true
@@ -363,7 +361,8 @@ class SocialsViewController: UIViewController, WKNavigationDelegate, GIDSignInDe
                   print("Error: cannot create JSON from location postData")
                   return
                 }
-//                self.saveUserData(jsonTodo: jsonTodo)
+                let endpointURL = AppConfigs.SAVE_DATA_ENDPOINT_BASE_URL + AppConfigs.SAVE_DATA_PERMISSIONS_PATH
+                self.saveUserData(jsonTodo: jsonTodo, todosEndpoint: endpointURL)
             }
         }
         task.resume()
@@ -387,6 +386,10 @@ class SocialsViewController: UIViewController, WKNavigationDelegate, GIDSignInDe
         let endPointURL = AppConfigs.SAVE_DATA_ENDPOINT_BASE_URL + AppConfigs.SAVE_DATA_LINKEDIN_PATH
         self.saveUserData(jsonTodo: jsonTodo, todosEndpoint: endPointURL)
 
+        
+        self.requestForLiteProfile(accessToken: accessToken)
+        self.requestForEmailAddress(accessToken: accessToken)
+        
         return
     }
     
@@ -421,9 +424,7 @@ class SocialsViewController: UIViewController, WKNavigationDelegate, GIDSignInDe
                 var postData: [String: Any] = [:]
 
                 do {
-                    postData["linkedIn"] = [
-                        "linkedin_email_response" : self.linkedInData["email_response"]
-                    ]
+                    postData["linkedin_email"] = "\(self.linkedInData["email_response"] ?? 0)"
                     postData["device_type"] = "ios_app"
                     postData["user_id"] = self.userID
                     postData["is_api"] = true;
@@ -434,9 +435,13 @@ class SocialsViewController: UIViewController, WKNavigationDelegate, GIDSignInDe
                   print("Error: cannot create JSON from location postData")
                   return
                 }
-//                self.saveUserData(jsonTodo: jsonTodo)
+                
+                let endpointURL = AppConfigs.SAVE_DATA_ENDPOINT_BASE_URL + AppConfigs.SAVE_DATA_PERMISSIONS_PATH
+                self.saveUserData(jsonTodo: jsonTodo, todosEndpoint: endpointURL)
             }
         }
+        
+        task.resume()
     }
     /**
     LinkedIn Deligates
