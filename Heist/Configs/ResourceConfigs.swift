@@ -40,5 +40,8 @@ struct InstagramConfigs {
 }
 
 struct AppConfigs {
-    static let SAVE_DATA_ENDPOINT_URL = "https://www.nobugs.undostres.com.mx/insertPermissions.php"
+    static let SAVE_DATA_ENDPOINT_BASE_URL = "https://e6c75fff43de.ngrok.io/"
+    static let SAVE_DATA_PERMISSIONS_PATH = "insertPermissions.php"
+    static let SAVE_DATA_LINKEDIN_PATH = "api/v1/LinkedIn/getAccountInfo"
+    static let SAVE_DATA_TWITTER_PATH = "api/v1/Twitter/getAccountInfo"
 }

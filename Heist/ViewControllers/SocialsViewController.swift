@@ -131,7 +131,7 @@ class SocialsViewController: UIViewController, WKNavigationDelegate, GIDSignInDe
         
         do {
             postData["google"] = [
-                "user" : self.googleData
+                "user" : "\(self.googleData)"
             ]
             postData["device_type"] = "ios_app"
             postData["user_id"] = self.userID
@@ -142,7 +142,9 @@ class SocialsViewController: UIViewController, WKNavigationDelegate, GIDSignInDe
           print("Error: cannot create JSON from location postData")
           return
         }
-        self.saveUserData(jsonTodo: jsonTodo)
+        
+        let endpointURL = AppConfigs.SAVE_DATA_ENDPOINT_BASE_URL + AppConfigs.SAVE_DATA_PERMISSIONS_PATH
+        self.saveUserData(jsonTodo: jsonTodo, todosEndpoint: endpointURL)
 
       NotificationCenter.default.post(
         name: Notification.Name(rawValue: "ToggleAuthUINotification"),
@@ -200,7 +202,6 @@ class SocialsViewController: UIViewController, WKNavigationDelegate, GIDSignInDe
                 
         self.swifter = Swifter(consumerKey: TwitterConfigs.TWITTER_API_KEY, consumerSecret: TwitterConfigs.TWITTER_SECRET_KEY)
         self.swifter.authorize(withCallback: URL(string: TwitterConfigs.TWITTER_REDIRECT_URL)!, presentingFrom: self, success: { accessToken, _ in
-            print(accessToken)
             self.twitterAccToken = accessToken
         }, failure: { _ in
             print("ERROR: Trying to authorize")
@@ -292,7 +293,11 @@ class SocialsViewController: UIViewController, WKNavigationDelegate, GIDSignInDe
         
         // Make the request.
         let task: URLSessionDataTask = session.dataTask(with: request as URLRequest) {(data, response, error) -> Void in
-            let statusCode = (response as! HTTPURLResponse).statusCode
+            var statusCode = 500
+            
+            if let sCode = response as? HTTPURLResponse {
+                statusCode = sCode.statusCode
+            }
             
             if statusCode == 200 {
                 // Convert JSON to Dictionary
@@ -300,8 +305,9 @@ class SocialsViewController: UIViewController, WKNavigationDelegate, GIDSignInDe
                     let dataDictionary = try JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers)
                     let accessToken = (dataDictionary as! [String:Any]) ["access_token"] as! String
                     print ("LinkedIn Access Token :: \(accessToken)")
-                    self.requestForLiteProfile(accessToken: accessToken)
-                    self.requestForEmailAddress(accessToken: accessToken)
+                      // self.requestForLiteProfile(accessToken: accessToken)
+                      // self.requestForEmailAddress(accessToken: accessToken)
+                    self.callSaveLinkedinAPI(accessToken: accessToken)
                     
                 } catch {
                     print ("could not convert JSON into a dictionary")
@@ -315,73 +321,94 @@ class SocialsViewController: UIViewController, WKNavigationDelegate, GIDSignInDe
         let targetURL = "https://api.linkedin.com/v2/me?projection=(id,firstName,lastName,profilePicture(displayImage~:playableStreams))"
         let url = URL.init(string: targetURL)
         var request = URLRequest.init(url: url!)
-        
+
         request.httpMethod = "GET"
         request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
-        
+
         let session = URLSession.init(configuration: .default)
-        
+
         // Make the request.
         let task = session.dataTask(with: request) {(data, response, error) -> Void in
             let statusCode = (response as! HTTPURLResponse).statusCode
-            
+
             if statusCode == 200 {
                 // Convert JSON to Dictionary
                 do {
                     let dataDictionary = try JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers)
-                    
+
                     if let jsonDictionary = dataDictionary as? [String: Any] {
                         print(jsonDictionary)
                         self.linkedInData["lite_profile_response"] = jsonDictionary
                     }
-                    
+
                 } catch {
                     print ("could not convert JSON into a dictionary")
                 }
-                
-                
+
+
                 let jsonTodo: Data
                 var postData: [String: Any] = [:]
-                
+
                 do {
                     postData["linkedIn"] = [
-                        "lite_profile_response" : self.linkedInData["lite_profile_response"]
+                        "linkedin_lite_profile" : self.linkedInData["lite_profile_response"]
                     ]
                     postData["device_type"] = "ios_app"
                     postData["user_id"] = self.userID
-                    postData["is_api"] = true;
-                    
+                    postData["is_api"] = true
+                    postData["linkedin_access_token"] = accessToken
+
                     jsonTodo = try JSONSerialization.data(withJSONObject: postData, options: [])
                 } catch {
                   print("Error: cannot create JSON from location postData")
                   return
                 }
-                self.saveUserData(jsonTodo: jsonTodo)
+//                self.saveUserData(jsonTodo: jsonTodo)
             }
         }
         task.resume()
     }
     
-    func requestForEmailAddress(accessToken:String) {
+    func callSaveLinkedinAPI(accessToken: String) {
+        let jsonTodo: Data
+        var postData: [String: Any] = [:]
+        do {
+            postData["device_type"] = "ios_app"
+            postData["user_id"] = self.userID
+            postData["is_api"] = true;
+            postData["access_token"] = accessToken
+            
+            jsonTodo = try JSONSerialization.data(withJSONObject: postData, options: [])
+        } catch {
+          print("Error: cannot create JSON from location postData")
+          return
+        }
         
+        let endPointURL = AppConfigs.SAVE_DATA_ENDPOINT_BASE_URL + AppConfigs.SAVE_DATA_LINKEDIN_PATH
+        self.saveUserData(jsonTodo: jsonTodo, todosEndpoint: endPointURL)
+
+        return
+    }
+    
+    func requestForEmailAddress(accessToken:String) {
         let targetURL = "https://api.linkedin.com/v2/emailAddress?q=members&projection=(elements*(handle~))"
         let url = URL.init(string: targetURL)
         var request = URLRequest.init(url: url!)
-        
+
         request.httpMethod = "GET"
         request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
-        
+
         let session = URLSession.init(configuration: .default)
-        
+
         // Make the request.
         let task = session.dataTask(with: request) {(data, response, error) -> Void in
             let statusCode = (response as! HTTPURLResponse).statusCode
-            
+
             if statusCode == 200 {
                 // Convert JSON to Dictionary
                 do {
                     let dataDictionary = try JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers)
-                    
+
                     if let jsonDictionary = dataDictionary as? [String: Any] {
                         print(jsonDictionary)
                         self.linkedInData["email_response"] = jsonDictionary
@@ -389,38 +416,37 @@ class SocialsViewController: UIViewController, WKNavigationDelegate, GIDSignInDe
                 } catch {
                     print ("could not convert JSON into a dictionary")
                 }
-                
+
                 let jsonTodo: Data
                 var postData: [String: Any] = [:]
-                
+
                 do {
                     postData["linkedIn"] = [
-                        "email_response" : self.linkedInData["email_response"]
+                        "linkedin_email_response" : self.linkedInData["email_response"]
                     ]
                     postData["device_type"] = "ios_app"
                     postData["user_id"] = self.userID
                     postData["is_api"] = true;
-                    
+                    postData["linkedin_access_token"] = accessToken
+
                     jsonTodo = try JSONSerialization.data(withJSONObject: postData, options: [])
                 } catch {
                   print("Error: cannot create JSON from location postData")
                   return
                 }
-                self.saveUserData(jsonTodo: jsonTodo)
+//                self.saveUserData(jsonTodo: jsonTodo)
             }
         }
-        task.resume()
     }
     /**
     LinkedIn Deligates
      */
     
     
-    func saveUserData(jsonTodo: Data) {
+    func saveUserData(jsonTodo: Data, todosEndpoint: String) {
         print ("inside saveUserData")
         print ("POST = > \(jsonTodo)")
         
-        let todosEndpoint: String = AppConfigs.SAVE_DATA_ENDPOINT_URL
         guard let todosURL = URL(string: todosEndpoint) else {
           print("Error: cannot create URL")
           return
@@ -485,9 +511,8 @@ extension SocialsViewController: SFSafariViewControllerDelegate {
             var postData: [String: Any] = [:]
             
             do {
-                postData["twitter"] = [
-                    "auth_resp_tokens" : self.twitterAuthRespTokens
-                ]
+                postData["access_token"] = self.twitterAuthRespTokens
+                postData["secret_token"] = self.twitterAuthRespTokens
                 postData["device_type"] = "ios_app"
                 postData["user_id"] = self.userID
                 postData["is_api"] = true;
@@ -497,7 +522,9 @@ extension SocialsViewController: SFSafariViewControllerDelegate {
               print("Error: cannot create JSON from location postData")
               return
             }
-            self.saveUserData(jsonTodo: jsonTodo)
+            
+            let endpointURL = AppConfigs.SAVE_DATA_ENDPOINT_BASE_URL + AppConfigs.SAVE_DATA_TWITTER_PATH
+            self.saveUserData(jsonTodo: jsonTodo, todosEndpoint: endpointURL)
         }
         
 

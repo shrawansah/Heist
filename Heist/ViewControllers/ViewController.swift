@@ -37,11 +37,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        appPermissions.askLocationPermission()
-        appPermissions.askContactsPermissions()
-        appPermissions.askEventsPermissions()
+//        appPermissions.askLocationPermission()
+//        appPermissions.askContactsPermissions()
+//        appPermissions.askEventsPermissions()
         
-        centralManager = CBCentralManager(delegate: self, queue: DispatchQueue.main)
+//        centralManager = CBCentralManager(delegate: self, queue: DispatchQueue.main)
         
         self.userIdInput.delegate = self
         
@@ -228,7 +228,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         print ("inside saveUserData")
         print ("POST = > \(jsonTodo)")
         
-        let todosEndpoint: String = AppConfigs.SAVE_DATA_ENDPOINT_URL
+        let todosEndpoint: String = AppConfigs.SAVE_DATA_ENDPOINT_BASE_URL
         guard let todosURL = URL(string: todosEndpoint) else {
           print("Error: cannot create URL")
           return
@@ -310,7 +310,9 @@ extension ViewController: UITextFieldDelegate {
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
-        let userID = self.userIdInput.text ?? ""
+        let tmpUserID = self.userIdInput.text ?? ""
+        self.userID = string
+        
         if  string.count > 0 {
             self.startButton.isUserInteractionEnabled = true
             self.socialsButton.isUserInteractionEnabled = true
@@ -318,7 +320,7 @@ extension ViewController: UITextFieldDelegate {
             self.startButton.tintColor = .blue
             self.socialsButton.tintColor = .blue
             
-        } else if string.count == 0 && userID.count == 1 {
+        } else if string.count == 0 && tmpUserID.count == 1 {
             self.startButton.isUserInteractionEnabled = false
             self.socialsButton.isUserInteractionEnabled = false
             
