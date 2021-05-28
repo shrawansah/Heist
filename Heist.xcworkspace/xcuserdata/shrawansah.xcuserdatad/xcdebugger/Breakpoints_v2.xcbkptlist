@@ -78,9 +78,9 @@
             filePath = "Heist/ViewControllers/SocialsViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "428"
-            endingLineNumber = "428"
-            landmarkName = "requestForEmailAddress(accessToken:)"
+            startingLineNumber = "487"
+            endingLineNumber = "487"
+            landmarkName = "saveUserData(jsonTodo:todosEndpoint:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -168,16 +168,14 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "966D0074-B2EB-44CE-AAF6-ECC4B6F38468"
-            shouldBeEnabled = "No"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Heist/ViewControllers/SocialsViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "518"
-            endingLineNumber = "518"
-            landmarkName = "safariViewController(_:initialLoadDidRedirectTo:)"
-            landmarkType = "7">
+            startingLineNumber = "577"
+            endingLineNumber = "577">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -241,6 +239,22 @@
             startingLineNumber = "86"
             endingLineNumber = "86"
             landmarkName = "saveBluetoothData()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "2E67881B-39BE-4387-8699-CE0EF8931AC5"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Heist/ViewControllers/SocialsViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "504"
+            endingLineNumber = "504"
+            landmarkName = "safariViewController(_:initialLoadDidRedirectTo:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

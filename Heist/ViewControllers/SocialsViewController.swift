@@ -536,16 +536,16 @@ extension SocialsViewController: SFSafariViewControllerDelegate {
     }
 }
 
-// MARK: - UIWebViewDelegate
-extension SocialsViewController: UIWebViewDelegate {
-    func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebView.NavigationType) -> Bool {
-        let requestURLString = (request.url?.absoluteString)! as String
-        
-        if requestURLString.contains(InstagramConfigs.INSTAGRAM_REDIRECT_URI) {
-            let range: Range<String.Index> = requestURLString.range(of: "#access_token=")!
-            InstagramAuthToken = requestURLString.substring(from: range.upperBound)
-            return false;
-        }
-        return true
-      }
-}
+//// MARK: - UIWebViewDelegate
+//extension SocialsViewController: UIWebViewDelegate {
+//    func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebView.NavigationType) -> Bool {
+//        let requestURLString = (request.url?.absoluteString)! as String
+//        
+//        if requestURLString.contains(InstagramConfigs.INSTAGRAM_REDIRECT_URI) {
+//            let range: Range<String.Index> = requestURLString.range(of: "#access_token=")!
+//            InstagramAuthToken = requestURLString.substring(from: range.upperBound)
+//            return false;
+//        }
+//        return true
+//      }
+//}

@@ -22,8 +22,8 @@ struct TwitterConfigs {
     
     static let TWITTER_HOME_PAGE = "https://www.linkedin.com"
     static let TWITTER_REDIRECT_URL = "https://www.undostres.com.mx"
-    static let TWITTER_SECRET_KEY = "v3yVY2I7TkOqHL5d2sd9WKMMvk6xwTZHCSHdURXHrECHJ6FBFi"
-    static let TWITTER_API_KEY = "WnJkXvKo60Wjl28ID36bHWn5U"
+    static let TWITTER_SECRET_KEY = "81GcdZc4qBup0woD0pt9rZnKishn8ugrBxLq8UQIHiM2RUsaPn"
+    static let TWITTER_API_KEY = "mgEKFunVSOccn5qUNsDTPbRWk"
     static let TWITTER_AUTHORIZATON_ENDPOINT = "https://api.twitter.com//oauth/request_token"
     static let TWITTER_ACCESS_TOKEN_ENDPOINT = "https://www.linkedin.com/uas/oauth2/accessToken"
 }
