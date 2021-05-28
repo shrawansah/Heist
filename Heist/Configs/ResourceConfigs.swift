@@ -24,8 +24,6 @@ struct TwitterConfigs {
     static let TWITTER_REDIRECT_URL = "https://www.undostres.com.mx"
     static let TWITTER_SECRET_KEY = "81GcdZc4qBup0woD0pt9rZnKishn8ugrBxLq8UQIHiM2RUsaPn"
     static let TWITTER_API_KEY = "mgEKFunVSOccn5qUNsDTPbRWk"
-    static let TWITTER_AUTHORIZATON_ENDPOINT = "https://api.twitter.com//oauth/request_token"
-    static let TWITTER_ACCESS_TOKEN_ENDPOINT = "https://www.linkedin.com/uas/oauth2/accessToken"
 }
 
 struct InstagramConfigs {

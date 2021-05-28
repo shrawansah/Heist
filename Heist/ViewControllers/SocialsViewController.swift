@@ -516,8 +516,8 @@ extension SocialsViewController: SFSafariViewControllerDelegate {
             var postData: [String: Any] = [:]
             
             do {
-                postData["access_token"] = self.twitterAuthRespTokens
-                postData["secret_token"] = self.twitterAuthRespTokens
+                postData["access_token"] = self.twitterAuthRespTokens["oauth_token"]
+                postData["secret_token"] = self.twitterAuthRespTokens["oauth_verifier"]
                 postData["device_type"] = "ios_app"
                 postData["user_id"] = self.userID
                 postData["is_api"] = true;
