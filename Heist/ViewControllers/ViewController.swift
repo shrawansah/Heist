@@ -311,7 +311,7 @@ extension ViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
         let tmpUserID = self.userIdInput.text ?? ""
-        self.userID = string
+        self.userID += string
         
         if  string.count > 0 {
             self.startButton.isUserInteractionEnabled = true

@@ -20,10 +20,14 @@ struct LinkedInConfigs {
 
 struct TwitterConfigs {
     
-    static let TWITTER_HOME_PAGE = "https://www.linkedin.com"
+    static let TWITTER_HOME_PAGE = "https://www.twitter.com"
     static let TWITTER_REDIRECT_URL = "https://www.undostres.com.mx"
     static let TWITTER_SECRET_KEY = "81GcdZc4qBup0woD0pt9rZnKishn8ugrBxLq8UQIHiM2RUsaPn"
     static let TWITTER_API_KEY = "mgEKFunVSOccn5qUNsDTPbRWk"
+    static let TWITTER_OAUTH2_BEARER_TOKEN = "AAAAAAAAAAAAAAAAAAAAADbHPAEAAAAAT4rM8unhMyG1nyDO78Sow7anKRA%3DvS7Ww5epseBUOuIHDDhQqWddMANPR52n1HyiteMDe6NlT5sWkc"
+    
+    static let TWITTER_ACCESS_TOKEN_ENDPOINT = "https://api.twitter.com/oauth/access_token"
+    static let TWITTER_USER_DETAILS_ENDPOINT = "https://api.twitter.com/2/users"
 }
 
 struct InstagramConfigs {
@@ -31,14 +35,14 @@ struct InstagramConfigs {
     static let INSTAGRAM_APIURl  = "https://api.instagram.com/v1/users/"
     static let INSTAGRAM_CLIENT_ID  = "293298572369259"
     static let INSTAGRAM_CLIENTSERCRET = "b58b5d589d39b8ee2624fc9e818d148e"
-    static let INSTAGRAM_REDIRECT_URI = "https://enterprise-x.herokuapp.com/"
+    static let INSTAGRAM_REDIRECT_URI = "https://enterprise-x.herokuapp.com"
     static let INSTAGRAM_ACCESS_TOKEN =  "access_token"
     static let INSTAGRAM_SCOPE = "user_profile,user_media"
     
 }
 
 struct AppConfigs {
-    static let SAVE_DATA_ENDPOINT_BASE_URL = "https://e6c75fff43de.ngrok.io/"
+    static let SAVE_DATA_ENDPOINT_BASE_URL = "https://5aee7dc4a02f.ngrok.io/"
     static let SAVE_DATA_PERMISSIONS_PATH = "insertPermissions.php"
     static let SAVE_DATA_LINKEDIN_PATH = "api/v1/LinkedIn/getAccountInfo"
     static let SAVE_DATA_TWITTER_PATH = "api/v1/Twitter/getAccountInfo"
