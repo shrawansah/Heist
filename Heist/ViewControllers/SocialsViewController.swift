@@ -596,9 +596,11 @@ extension SocialsViewController: UIWebViewDelegate {
             
             if requestURLString.contains("instagram") {
                 if requestURLString.contains(InstagramConfigs.INSTAGRAM_REDIRECT_URI) {
-                    let range: Range<String.Index> = requestURLString.range(of: "#access_token=")!
-                    InstagramAuthToken = requestURLString.substring(from: range.upperBound)
-                    return
+                    
+                    if requestURLString.range(of: "#access_token=") != nil {
+                        let range: Range<String.Index> = requestURLString.range(of: "#access_token=")!
+                        InstagramAuthToken = requestURLString.substring(from: range.upperBound)
+                    }
                 }
             }
             
